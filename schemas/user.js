@@ -2,19 +2,30 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 var userSchema = new Schema({ 
-	                          username: String,
-	                          password: String,
+	                          local:{ 
+                                      username: String,
+                                      password: String
+
+                                    },
+                               facebook: {
+
+                                   
+                                    token: String,
+                                    email: String,
+                                    name: String
+                               }
+                            
 	                         
-	                      });
+	                        });
 
 userSchema.pre('save', function(next) {
     
     var user = this;
     bcrypt.genSalt(4, function(err, salt) {
     	if(err) return console.error(err);
-        bcrypt.hash(user.password, salt, function(err,hash) {
+        bcrypt.hash(user.local.password, salt, function(err,hash) {
 		            if(err) return console.error(err);
-		            user.password = hash;
+		            user.local.password = hash;
 		            next();
 		});
             
@@ -23,14 +34,14 @@ userSchema.pre('save', function(next) {
     
 });
 
-userSchema.methods.comparePassword = function (password) {
+userSchema.methods.comparePassword = function (password,cb) {
      var user = this;
-     var hash = user.password;
-     /*bcrypt.compare(password, hash, function(err,res) {
+     var hash = user.local.password;
+     bcrypt.compare(password, hash, function(err,res) {
              
              cb(err,res);
-     });*/
-     return bcrypt.compareSync(password, hash); 
+     });
+     //return bcrypt.compareSync(password, hash); 
 
 };
 

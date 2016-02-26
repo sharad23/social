@@ -6,8 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport =  require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var auth = require('./auth')(passport,LocalStrategy);
+var auth = require('./auth')(passport);
 var login = require('./routes/login')(passport);
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -30,7 +29,7 @@ app.use(session({
                   secret: 'ssshhhhh',  
                   resave: false,
                   saveUninitialized: false,
-                  cookie: { maxAge: 60000 }, //remove this life if u want the session expire after u close the browser
+                  cookie: { maxAge: 600000,  }, //remove this life if u want the session expire after u close the browser
                   store: new redisStore({ host: 'localhost', port: 6379, client: client })
                
                 }));
@@ -53,6 +52,7 @@ app.use(function(req,res,next){
 });
 app.use('/', routes);
 app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
