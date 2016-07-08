@@ -15,11 +15,15 @@ var redisStore = require('connect-redis')(session);
 var client  = redis.createClient();
 var app = express();
 var db = require('./db');
+var multer = require('multer')
+var uploading = multer({
+  dest: './uploads/'
+})
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
+console.log(require('./config/test/abc')());
+// uncomment after placing your favpath.resolveicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -33,13 +37,22 @@ app.use(session({
                   store: new redisStore({ host: 'localhost', port: 6379, client: client })
                
                 }));
-app.use(function(req,res,nxt){
+app.post('/', uploading.single('image') ,function(req,res,nxt){
    
-      nxt();
+      //res.json({ result: 'uploaded' });
+      if(req.file){
+             
+             res.json({result: req.file})
+      }
+      else{
+             
+             res.json({ result: 'file not found' });
+      }
 });
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+app.post
 app.use('/login',login);
 app.use(function(req,res,next){
       if(req.user){

@@ -1,0 +1,7 @@
+var node5 = require('./node5')();
+console.log(node5.name);
+node5.setname("daddy");
+console.log(node5.name);
+
+var node6 = require('./node5')();
+console.log(node6.name); 

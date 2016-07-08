@@ -15,16 +15,12 @@ module.exports = function(passport){
         //it works both with passport and passports
         router.post('/',passport.authenticate('local', { 
         	                                                successRedirect: '/',
-                                                          failureRedirect: '/login' 
+                                                            failureRedirect: '/login' 
 
                                                         }
         ));
-
+      
         router.get('/facebook',passport.authenticate('facebook', { scope : 'email' }));
-
-        
-       
-        
         return router;
 
 };

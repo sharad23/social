@@ -1,9 +1,15 @@
 var express = require('express');
 var router = express.Router();
+var Post = require('../schemas/post');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-      res.render('index', { title: 'Express' });
+	  Post.find({})
+	      .lean()
+	      .exec(function(err,data){
+                if(err) return console.log(err);
+                res.render('index', { title: 'Express' , posts: data });
+          });
+      
 });
 
 router.get('/logout',function(req,res,next){
